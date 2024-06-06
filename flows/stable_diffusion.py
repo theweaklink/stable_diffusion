@@ -34,7 +34,7 @@ def run():
     images = model.generate_image(
         interpolated_encodings,
         batch_size=interpolation_steps,
-        diffusion_noise=noise if onecode.checkbox('Use noise?', False),
+        diffusion_noise=noise if onecode.checkbox('Use noise?', False) else None,
         num_steps=onecode.slider("Steps", 30, min=10, max=100, step=1)
         unconditional_guidance_scale=onecode.number_input("Guidance scale", 7, min=1, step=1)
     )
