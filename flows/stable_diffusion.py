@@ -12,11 +12,11 @@ from .gif_export import export_as_gif
 
 def run():
     onecode.Logger.info("Instantiating the Stable Diffusion model...")
-    model = keras_cv.models.StableDiffusion(jit_compile=True)
+    model = keras_cv.models.StableDiffusion(jit_compile=False)
 
     prompt_1 = onecode.text_input("Prompt 1", "A watercolor painting of a Golden Retriever at the beach")
     prompt_2 =  onecode.text_input("Prompt 2", "A still life DSLR photo of a bowl of fruit")
-    interpolation_steps = onecode.slider("Interpolaion Steps", 5, min=3, max=500, step=1)
+    interpolation_steps = onecode.slider("Interpolation Steps", 5, min=3, max=500, step=1)
 
     encoding_1 = ops.squeeze(model.encode_text(prompt_1))
     encoding_2 = ops.squeeze(model.encode_text(prompt_2))
