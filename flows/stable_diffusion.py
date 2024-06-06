@@ -12,11 +12,12 @@ from .gif_export import export_as_gif
 
 def run():
     onecode.Logger.info("Instantiating the Stable Diffusion model...")
-    model = keras_cv.models.StableDiffusion(jit_compile=False)
+    size = onecode.slider('Image Size', 256, min=128, max=512, step=128)
+    model = keras_cv.models.StableDiffusion(img_height=size, img_width=size, jit_compile=False)
 
-    prompt_1 = onecode.text_input("Prompt 1", "A watercolor painting of a Golden Retriever at the beach")
-    prompt_2 =  onecode.text_input("Prompt 2", "A still life DSLR photo of a bowl of fruit")
-    interpolation_steps = onecode.slider("Interpolation Steps", 5, min=3, max=500, step=1)
+    prompt_1 = onecode.text_input("Prompt 1", "A whale in outer space")
+    prompt_2 =  onecode.text_input("Prompt 2", "An astronaut riding a horse")
+    interpolation_steps = onecode.slider("Interpolation Steps", 15, min=3, max=100, step=1)
 
     encoding_1 = ops.squeeze(model.encode_text(prompt_1))
     encoding_2 = ops.squeeze(model.encode_text(prompt_2))
@@ -27,20 +28,22 @@ def run():
     onecode.Logger.debug(f"Encoding shape: {encoding_1.shape}")
 
     # keep the diffusion noise constant between images.
-    noise = keras.random.normal((512 // 8, 512 // 8, 4), seed=404)
+    noise = keras.random.normal((size // 8, size // 8, 4), seed=404)
 
     onecode.Logger.info("Generate images...")
     images = model.generate_image(
         interpolated_encodings,
         batch_size=interpolation_steps,
-        diffusion_noise=noise,
+        diffusion_noise=noise if onecode.checkbox('Use noise?', False),
+        num_steps=onecode.slider("Steps", 30, min=10, max=100, step=1)
+        unconditional_guidance_scale=onecode.number_input("Guidance scale", 7, min=1, step=1)
     )
 
-    output_filename = onecode.text_input("GIF Name", "Watercolor_fruits.gif")
+    output_filename = onecode.text_input("GIF Name", "Space_Whale.gif")
 
     export_as_gif(
         onecode.file_output("gif", output_filename),
         [Image.fromarray(img) for img in images],
         frames_per_second=2,
-        rubber_band=True,
+        rubber_band=onecode.checkbox("GIF Rubberband?", False),
     )
