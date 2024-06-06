@@ -1,0 +1,4 @@
+keras-cv
+matplotlib
+onecode>=1,<2
+tensorflow
