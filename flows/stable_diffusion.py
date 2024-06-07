@@ -17,7 +17,7 @@ def run():
 
     prompt_1 = onecode.text_input("Prompt 1", "A whale in outer space")
     prompt_2 =  onecode.text_input("Prompt 2", "An astronaut riding a horse")
-    interpolation_steps = onecode.slider("Interpolation Steps", 8, min=3, max=20, step=1)
+    interpolation_steps = onecode.slider("Interpolation Steps", 8, min=3, max=100, step=1)
 
     encoding_1 = ops.squeeze(model.encode_text(prompt_1))
     encoding_2 = ops.squeeze(model.encode_text(prompt_2))
