@@ -35,12 +35,12 @@ def run():
         interpolated_encodings,
         batch_size=interpolation_steps,
         diffusion_noise=noise if onecode.checkbox('Use noise?', False) else None,
-        num_steps=onecode.slider("Steps", 30, min=10, max=100, step=1),
+        num_steps=onecode.slider("ML iterations", 50, min=10, max=100, step=1),
         unconditional_guidance_scale=onecode.number_input("Guidance scale", 7, min=1, step=1)
     )
 
+    onecode.Logger.info("Exporting to GIF...")
     output_filename = onecode.text_input("GIF Name", "Space_Whale.gif")
-
     export_as_gif(
         onecode.file_output("gif", output_filename),
         [Image.fromarray(img) for img in images],
