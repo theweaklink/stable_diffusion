@@ -44,6 +44,6 @@ def run():
     export_as_gif(
         onecode.file_output("gif", output_filename),
         [Image.fromarray(img) for img in images],
-        frames_per_second=2,
+        frames_per_second=onecode.slider('GIF FPS', 2, min=1, max=30, step=1),
         rubber_band=onecode.checkbox("GIF Rubberband?", False),
     )
